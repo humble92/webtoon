@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webtoon/models/webtoon_model.dart';
 import 'package:webtoon/models/webtoon_detail_model.dart';
 import 'package:webtoon/models/webtoon_episode_model.dart';
@@ -17,19 +18,55 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  // another approach to initialize Future
   late final Future<WebtoonDetailModel> webtoonDetail =
       ApiService.getToonById(widget.webtoon.id);
   late final Future<List<WebtoonEpisodeModel>> episodes =
       ApiService.getLatestEpisodesById(widget.webtoon.id);
 
-  // @override
-  // void initState() {
-  //   webtoonDetail =
-  //     ApiService.getToonById(widget.webtoon.id);
-  //   episodes =
-  //     ApiService.getLatestEpisodesById(widget.webtoon.id);
-  //   super.initState();
-  // }
+  late final SharedPreferences prefs;
+  bool isLiked = false;
+
+  @override
+  void initState() {
+    // webtoonDetail =
+    //   ApiService.getToonById(widget.webtoon.id);
+    // episodes =
+    //   ApiService.getLatestEpisodesById(widget.webtoon.id);
+    // Obtain shared preferences.
+    initPrefs();
+    super.initState();
+  }
+
+  Future initPrefs() async {
+    // Obtain shared preferences.
+    prefs = await SharedPreferences.getInstance();
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      if (likedToons.contains(widget.webtoon.id) == true) {
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      await prefs.setStringList('likedToons', []);
+    }
+  }
+
+  onHeartTap() async {
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.webtoon.id);
+      } else {
+        likedToons.add(widget.webtoon.id);
+      }
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +76,14 @@ class _DetailScreenState extends State<DetailScreen> {
         elevation: 2,
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+              isLiked ? Icons.favorite : Icons.favorite_outline,
+            ),
+          )
+        ],
         title: Text(
           widget.webtoon.title,
           style: const TextStyle(
