@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webtoon/models/webtoon_model.dart';
+import 'package:webtoon/screens/detail_screen.dart';
 
 class Webtoon extends StatelessWidget {
   const Webtoon({
@@ -12,7 +13,14 @@ class Webtoon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("tabbed..");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+              webtoon: webtoon,
+            ),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -30,7 +38,6 @@ class Webtoon extends StatelessWidget {
                 ]),
             child: Image.network(
               webtoon.thumb,
-              // "https://www.centerforbam.com/wp-content/uploads/2015/10/slide02.jpg",
               headers: const {
                 'User-Agent':
                     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76',
