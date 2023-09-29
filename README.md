@@ -1,6 +1,6 @@
 # webtoon
 
-"A new Flutter project."
+"Naver webtoon viewer"
 
 ## Getting Started
 
@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Captures
+
+![image](https://github.com/humble92/webtoon/assets/1191154/14b4c429-b904-447a-b72e-7fb861976366)
+
+![image](https://github.com/humble92/webtoon/assets/1191154/9c6f47bf-6b2c-4660-bff6-e4905babc9ef)
